@@ -1,0 +1,32 @@
+name: Generate GitHub Snake
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate Snake graph
+        uses: Platane/snk@v3
+        with:
+          github_user_name: AhmedAdelCoder
+          outputs: |
+            output/github-snake.svg
+            output/github-snake-dark.svg?palette=github-dark
+
+      - name: Push generated graph
+        run: |
+          git config --global user.name "Ahmed Adel"
+          git config --global user.email "aa22200622@gmail.com"
+          git add output/* || echo "No changes"
+          git commit -m "Update snake graph" || echo "Nothing to commit"
+          git push
